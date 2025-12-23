@@ -64,15 +64,6 @@ jobs:
                   abi="${BASH_REMATCH[3]}"
                   echo "ver_name=$versionName" >> $GITHUB_ENV
                   echo "ver_code=${versionCode: -3}" >> $GITHUB_ENV
-                  response=$(curl --retry 3 -X POST -H "Cache-Control: no-cache" \
-                  -H "Content-Type: application/json" \
-                  -H "Cookie: xupdate_token=${{ secrets.XUPDATE_TOKEN }}" \
-                  -H "X-Token: ${{ secrets.X_TOKEN }}" \
-                  -d "{\"appKey\":\"${applicationId}\",\"versionName\":\"${versionName}\",\"versionCode\":\"${versionCode}\",\"modifyContent\":\"\",\"updateStatus\":1,\"gitCommitId\":\"${gitCommitId}\",\"buildTime\":\"${buildTime}\",\"uploadTime\":\"${buildTime}\"}" \
-                  ${{ secrets.URL_ADD_VERSION }})
-          
-                  version_id=$(echo $response | grep -oP '"versionId":\s*\K\d+') # 提取versionId
-                  echo "versionId: $version_id"
               fi
           done
       # 存档打包的文件，以便后续上传，TODO: 看起来有点笨，有没有更好的方法？
@@ -107,5 +98,6 @@ jobs:
           name: "SmsF_${{ env.ver_name }}_500${{ env.ver_code }}_x86_64_release.apk"
 
           path: "${{ env.output }}/SmsF_*_x86_64_release.apk"
+
 
 
